@@ -1,5 +1,4 @@
 class Game
-  attr_accessor :incorrect_guesses, :word_display
   attr_reader :random_word
 
   def initialize
@@ -30,8 +29,22 @@ class Game
   end
 end
 
+class Player
+  def initialize
+    @letter_guess = ""
+  end
+
+  def get_letter_guess 
+    puts "Guess a letter:"
+    @letter_guess = gets.chomp
+    puts @letter_guess
+  end
+end
+
 
 game = Game.new
+player = Player.new
+
 game.get_random_word
 
 game.show_wrong_guesses_left
@@ -39,3 +52,5 @@ game.show_wrong_guesses_left
 puts game.random_word
 
 game.display_word_state
+
+player.get_letter_guess
