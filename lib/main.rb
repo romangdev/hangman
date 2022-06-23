@@ -88,26 +88,37 @@ class Player
   end
 
   def get_letter_guess(incorrect_letters, word_display)
-    guess_flag = false
-    puts 'Guess a letter:'
-    @letter_guess = gets.chomp.downcase
-    if incorrect_letters.include?(@letter_guess) || word_display.include?(@letter_guess)
-      guess_flag = true
-      raise 'ERROR: Previously made guess'
-    elsif @letter_guess.length > 1 || @letter_guess.count('a-z').zero?
-      raise 'ERROR: Incorrect input'
+    # if @letter_guess == "save"
+    #   @letter_guess
+    # else
+
+    # end
+    begin
+      guess_flag = false
+      puts "Guess a letter (or type 'save' to save the game):"
+      @letter_guess = gets.chomp.downcase
+      if @letter_guess == "save"
+        p @letter_guess
+      else
+        if incorrect_letters.include?(@letter_guess) || word_display.include?(@letter_guess)
+          guess_flag = true
+          raise "ERROR: Previously made guess"
+        elsif @letter_guess.length > 1 || @letter_guess.count("a-z") == 0
+          raise "ERROR: Incorrect input"
+        else
+          @letter_guess
+        end
+      end
+    rescue
+      if guess_flag == true
+        puts "\nYou've already guessed #{letter_guess}. Please try again."
+      else
+        puts "\nMake sure you enter a letter, and only one letter."
+      end
+      retry
     else
       @letter_guess
     end
-  rescue StandardError
-    if guess_flag == true
-      puts "\nYou've already guessed #{letter_guess}. Please try again."
-    else
-      puts "\nMake sure you enter a letter, and only one letter."
-    end
-    retry
-  else
-    @letter_guess
   end
 end
 
@@ -127,9 +138,13 @@ until game.incorrect_guesses.zero? || game.winner
 
   player.get_letter_guess(game.incorrect_letters, game.word_display)
 
-  flag = game.fill_guess(player.letter_guess)
-  game.handle_wrong_guess(player.letter_guess) if flag == false
-
-  game.check_winner
-  game.check_loser
+  if player.letter_guess == "save"
+    p "IS SAVE!!!"
+  else
+    flag = game.fill_guess(player.letter_guess)
+    game.handle_wrong_guess(player.letter_guess) if flag == false
+  
+    game.check_winner
+    game.check_loser
+  end
 end
