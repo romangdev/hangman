@@ -1,12 +1,13 @@
 class Game
   attr_accessor :word_display
-  attr_reader :random_word, :incorrect_guesses
+  attr_reader :random_word, :incorrect_guesses, :winner
 
   def initialize
     @random_word = ""
     @incorrect_guesses = 6
     @word_display = []
     @incorrect_letters = []
+    @winner = false
   end
 
   def get_random_word
@@ -62,6 +63,12 @@ class Game
     end
     puts "\n"
   end
+
+  def check_winner
+    @winner = true if @word_display.join == @random_word
+    puts "Congratulations, you've won!"
+    puts "The word was: #{@random_word}"
+  end
 end
 
 class Player
@@ -83,7 +90,7 @@ player = Player.new
 game.get_random_word
 game.fill_empty_word_state
 
-until game.incorrect_guesses == 0
+until game.incorrect_guesses == 0 || game.winner
   game.show_wrong_guesses_left
 
   puts game.random_word
@@ -97,4 +104,6 @@ until game.incorrect_guesses == 0
 
   game.show_guessed_letters
   game.display_word_state
+
+  game.check_winner
 end
