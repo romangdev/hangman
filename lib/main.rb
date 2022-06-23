@@ -17,7 +17,7 @@ class Game
   end
 
   def show_wrong_guesses_left
-    puts "You have #{@incorrect_guesses} wrong guess(es) left."
+    puts "\nYou have #{@incorrect_guesses} wrong guess(es) left."
   end
 
   def fill_empty_word_state
@@ -57,7 +57,7 @@ class Game
   end
 
   def show_guessed_letters
-    print "Incorrect guesses: "
+    print "Incorrect guesses made: "
     @incorrect_letters.each do |guess|
       print "#{guess}, "
     end
@@ -65,9 +65,18 @@ class Game
   end
 
   def check_winner
-    @winner = true if @word_display.join == @random_word
-    puts "Congratulations, you've won!"
-    puts "The word was: #{@random_word}"
+    if @word_display.join == @random_word
+      @winner = true 
+      puts "\nCongratulations, you've won!"
+      puts "The word was: #{@random_word}"
+    end
+  end
+
+  def check_loser
+    if @incorrect_guesses == 0
+      puts "\nWhomp whomp... you've lost."
+      puts "The word was: #{@random_word}"
+    end
   end
 end
 
@@ -92,6 +101,7 @@ game.fill_empty_word_state
 
 until game.incorrect_guesses == 0 || game.winner
   game.show_wrong_guesses_left
+  game.show_guessed_letters
 
   puts game.random_word
 
@@ -102,8 +112,6 @@ until game.incorrect_guesses == 0 || game.winner
   flag = game.fill_guess(player.letter_guess)
   game.handle_wrong_guess(player.letter_guess) if flag == false
 
-  game.show_guessed_letters
-  game.display_word_state
-
   game.check_winner
+  game.check_loser
 end
