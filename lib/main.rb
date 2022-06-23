@@ -3,7 +3,7 @@ class Game
   attr_reader :random_word, :incorrect_guesses, :winner
 
   def initialize
-    @random_word = ""
+    @random_word = ''
     @incorrect_guesses = 6
     @word_display = []
     @incorrect_letters = []
@@ -12,7 +12,7 @@ class Game
 
   def get_random_word
     until @random_word.length >= 5 && @random_word.length <= 12
-      @random_word = File.readlines("google-10000-english-no-swears.txt").map(&:chomp).sample
+      @random_word = File.readlines('google-10000-english-no-swears.txt').map(&:chomp).sample
     end
   end
 
@@ -21,8 +21,8 @@ class Game
   end
 
   def fill_empty_word_state
-    for i in 0..(self.random_word.length - 1)
-      @word_display << "__"
+    for i in 0..(random_word.length - 1)
+      @word_display << '__'
     end
   end
 
@@ -34,13 +34,13 @@ class Game
   end
 
   def fill_guess(letter_guess)
-    if self.random_word.include?(letter_guess)
+    if random_word.include?(letter_guess)
       puts "\nNice guess - #{letter_guess} is in the secret word!"
-      self.random_word.split("").each_with_index do |char, idx|
+      random_word.split('').each_with_index do |char, idx|
         if char == letter_guess
-          self.word_display[idx] = letter_guess
+          word_display[idx] = letter_guess
         else
-          self.word_display
+          word_display
         end
       end
     else
@@ -49,7 +49,7 @@ class Game
   end
 
   def handle_wrong_guess(letter_guess)
-    if self.random_word.include?(letter_guess) == false
+    if random_word.include?(letter_guess) == false
       @incorrect_guesses -= 1
       @incorrect_letters << letter_guess
       puts "\nSorry... that's wrong. #{letter_guess} is NOT in the secret word!"
@@ -57,7 +57,7 @@ class Game
   end
 
   def show_guessed_letters
-    print "Incorrect guesses made: "
+    print 'Incorrect guesses made: '
     @incorrect_letters.each do |guess|
       print "#{guess}, "
     end
@@ -66,7 +66,7 @@ class Game
 
   def check_winner
     if @word_display.join == @random_word
-      @winner = true 
+      @winner = true
       puts "\nCongratulations, you've won!"
       puts "The word was: #{@random_word}"
     end
@@ -82,38 +82,34 @@ end
 
 class Player
   attr_reader :letter_guess
+
   def initialize
-    @letter_guess = ""
+    @letter_guess = ''
   end
 
   def get_letter_guess(incorrect_letters, word_display)
-    begin
-      guess_flag = false
-      puts "Guess a letter:"
-      @letter_guess = gets.chomp.downcase
-      if incorrect_letters.include?(@letter_guess) || word_display.include?(@letter_guess)
-        guess_flag = true
-        raise "ERROR: Previously made guess"
-      elsif
-        @letter_guess.length > 1 || @letter_guess.count("a-z") == 0
-        raise "ERROR: Incorrect input"
-      else
-        @letter_guess
-      end
-    rescue
-      if guess_flag == true
-        puts "\nYou've already guessed #{letter_guess}. Please try again."
-        retry
-      else
-        puts "\nMake sure you enter a letter, and only one letter."
-        retry
-      end
+    guess_flag = false
+    puts 'Guess a letter:'
+    @letter_guess = gets.chomp.downcase
+    if incorrect_letters.include?(@letter_guess) || word_display.include?(@letter_guess)
+      guess_flag = true
+      raise 'ERROR: Previously made guess'
+    elsif @letter_guess.length > 1 || @letter_guess.count('a-z').zero?
+      raise 'ERROR: Incorrect input'
     else
       @letter_guess
     end
+  rescue StandardError
+    if guess_flag == true
+      puts "\nYou've already guessed #{letter_guess}. Please try again."
+    else
+      puts "\nMake sure you enter a letter, and only one letter."
+    end
+    retry
+  else
+    @letter_guess
   end
 end
-
 
 game = Game.new
 player = Player.new
@@ -121,7 +117,7 @@ player = Player.new
 game.get_random_word
 game.fill_empty_word_state
 
-until game.incorrect_guesses == 0 || game.winner
+until game.incorrect_guesses.zero? || game.winner
   game.show_wrong_guesses_left
   game.show_guessed_letters
 
