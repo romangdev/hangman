@@ -1,5 +1,5 @@
 class Game
-  attr_accessor :word_display
+  attr_accessor :word_display, :incorrect_letters
   attr_reader :random_word, :incorrect_guesses, :winner
 
   def initialize
@@ -35,7 +35,7 @@ class Game
 
   def fill_guess(letter_guess)
     if self.random_word.include?(letter_guess)
-      puts "Nice guess - #{letter_guess} is in the secret word!"
+      puts "\nNice guess - #{letter_guess} is in the secret word!"
       self.random_word.split("").each_with_index do |char, idx|
         if char == letter_guess
           self.word_display[idx] = letter_guess
@@ -52,7 +52,7 @@ class Game
     if self.random_word.include?(letter_guess) == false
       @incorrect_guesses -= 1
       @incorrect_letters << letter_guess
-      puts "Sorry... that's wrong. #{letter_guess} is NOT in the secret word!"
+      puts "\nSorry... that's wrong. #{letter_guess} is NOT in the secret word!"
     end
   end
 
@@ -86,9 +86,31 @@ class Player
     @letter_guess = ""
   end
 
-  def get_letter_guess 
-    puts "Guess a letter:"
-    @letter_guess = gets.chomp.downcase
+  def get_letter_guess(incorrect_letters, word_display)
+    begin
+      guess_flag = false
+      puts "Guess a letter:"
+      @letter_guess = gets.chomp.downcase
+      if incorrect_letters.include?(@letter_guess) || word_display.include?(@letter_guess)
+        guess_flag = true
+        raise "ERROR: Previously made guess"
+      elsif
+        @letter_guess.length > 1 || @letter_guess.count("a-z") == 0
+        raise "ERROR: Incorrect input"
+      else
+        @letter_guess
+      end
+    rescue
+      if guess_flag == true
+        puts "\nYou've already guessed #{letter_guess}. Please try again."
+        retry
+      else
+        puts "\nMake sure you enter a letter, and only one letter."
+        retry
+      end
+    else
+      @letter_guess
+    end
   end
 end
 
@@ -107,7 +129,7 @@ until game.incorrect_guesses == 0 || game.winner
 
   game.display_word_state
 
-  player.get_letter_guess
+  player.get_letter_guess(game.incorrect_letters, game.word_display)
 
   flag = game.fill_guess(player.letter_guess)
   game.handle_wrong_guess(player.letter_guess) if flag == false
