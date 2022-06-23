@@ -1,3 +1,5 @@
+require "yaml"
+
 class Game
   attr_accessor :word_display, :incorrect_letters
   attr_reader :random_word, :incorrect_guesses, :winner
@@ -78,6 +80,25 @@ class Game
       puts "The word was: #{@random_word}"
     end
   end
+
+  def save_game
+    @save_yaml = self.to_yaml
+    Dir.mkdir("saves") unless Dir.exist?("saves")
+    File.open("saves/save_file", "w") {|file| file.write @save_yaml}
+    puts "Your game has been saved.\n"
+  end
+
+  protected
+
+  def to_yaml
+    YAML.dump ({
+      random_word: @random_word,
+      incorrect_guesses: @incorrect_guesses,
+      word_display: @word_display,
+      incorrect_letters: @incorrect_letters,
+      winner: @winner
+    })
+  end
 end
 
 class Player
@@ -88,17 +109,12 @@ class Player
   end
 
   def get_letter_guess(incorrect_letters, word_display)
-    # if @letter_guess == "save"
-    #   @letter_guess
-    # else
-
-    # end
     begin
       guess_flag = false
       puts "Guess a letter (or type 'save' to save the game):"
       @letter_guess = gets.chomp.downcase
       if @letter_guess == "save"
-        p @letter_guess
+        @letter_guess
       else
         if incorrect_letters.include?(@letter_guess) || word_display.include?(@letter_guess)
           guess_flag = true
@@ -139,7 +155,7 @@ until game.incorrect_guesses.zero? || game.winner
   player.get_letter_guess(game.incorrect_letters, game.word_display)
 
   if player.letter_guess == "save"
-    p "IS SAVE!!!"
+    game.save_game
   else
     flag = game.fill_guess(player.letter_guess)
     game.handle_wrong_guess(player.letter_guess) if flag == false

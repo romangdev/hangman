@@ -1,0 +1,17 @@
+---
+:random_word: propecia
+:incorrect_guesses: 3
+:word_display:
+- p
+- __
+- o
+- p
+- __
+- c
+- __
+- a
+:incorrect_letters:
+- l
+- m
+- n
+:winner: false
