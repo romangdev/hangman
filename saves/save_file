@@ -1,17 +1,16 @@
 ---
-:random_word: propecia
+:random_word: bangkok
 :incorrect_guesses: 3
 :word_display:
-- p
+- b
 - __
-- o
-- p
-- __
-- c
-- __
-- a
-:incorrect_letters:
-- l
-- m
 - n
+- __
+- k
+- __
+- k
+:incorrect_letters:
+- q
+- e
+- r
 :winner: false

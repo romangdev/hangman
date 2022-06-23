@@ -85,7 +85,7 @@ class Game
     @save_yaml = self.to_yaml
     Dir.mkdir("saves") unless Dir.exist?("saves")
     File.open("saves/save_file", "w") {|file| file.write @save_yaml}
-    puts "Your game has been saved.\n"
+    puts "\nYOUR GAME HAS BEEN SAVED.\n"
   end
 
   protected
@@ -136,31 +136,51 @@ class Player
       @letter_guess
     end
   end
+
+  def choose_game_state
+    begin
+      puts "\nType 'load' if you want to play your last saved game."
+      puts "Type 'new' if you want to play a new game."
+      @game_state = gets.chomp
+      raise "ERROR: Incorrect input" if @game_state != "new" && @game_state != "load"
+    rescue
+      puts "\nYou must've mistyped. Please try again."
+      retry
+    else
+      @game_state
+    end
+  end
 end
 
-game = Game.new
 player = Player.new
 
-game.get_random_word
-game.fill_empty_word_state
+game_state = player.choose_game_state
 
-until game.incorrect_guesses.zero? || game.winner
-  game.show_wrong_guesses_left
-  game.show_guessed_letters
+if game_state == "new"
+  game = Game.new
 
-  puts game.random_word
+  game.get_random_word
+  game.fill_empty_word_state
 
-  game.display_word_state
+  until game.incorrect_guesses.zero? || game.winner
+    game.show_wrong_guesses_left
+    game.show_guessed_letters
 
-  player.get_letter_guess(game.incorrect_letters, game.word_display)
+    puts game.random_word
 
-  if player.letter_guess == "save"
-    game.save_game
-  else
-    flag = game.fill_guess(player.letter_guess)
-    game.handle_wrong_guess(player.letter_guess) if flag == false
-  
-    game.check_winner
-    game.check_loser
+    game.display_word_state
+
+    player.get_letter_guess(game.incorrect_letters, game.word_display)
+
+    if player.letter_guess == "save"
+      game.save_game
+    else
+      flag = game.fill_guess(player.letter_guess)
+      game.handle_wrong_guess(player.letter_guess) if flag == false
+    
+      game.check_winner
+      game.check_loser
+    end
   end
+# elsif game_state == "load"
 end
