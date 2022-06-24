@@ -2,7 +2,7 @@
 
 A command line based replication of the game Hangman. Tracks incorrect guess limit of 6 instead of displaying hanging man graphic.
 
-![Screen Shot 2022-06-19 at 5 46 10 PM](https://user-images.githubusercontent.com/74276666/175565263-5e22c887-489a-49b9-8e35-235d0a442155.png)
+![Screen Shot 2022-06-24 at 11 14 40 AM](https://user-images.githubusercontent.com/74276666/175565421-fa0eeada-373b-45d4-990d-7e2169388674.png)
 
 # How It's Made:
 Tech used: Ruby
