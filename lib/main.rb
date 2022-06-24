@@ -84,13 +84,14 @@ class Game
   def save_game
     @save_yaml = self.to_yaml
     Dir.mkdir("saves") unless Dir.exist?("saves")
-    File.open("saves/save_file.yml", "w") {|file| file.write @save_yaml}
+    puts "\nWhat do you want to name your save file?"
+    @save_name = gets.chomp
+    File.open("saves/#{@save_name}", "w") {|file| file.write @save_yaml}
     puts "\nYOUR GAME HAS BEEN SAVED.\n"
   end
 
   def self.from_yaml(string)
     data = YAML.load File.read(string)
-    puts data
     self.new(data[:random_word], data[:incorrect_guesses], data[:word_display], 
       data[:incorrect_letters], data[:winner])
   end
@@ -109,7 +110,7 @@ class Game
 end
 
 class Player
-  attr_reader :letter_guess
+  attr_reader :letter_guess, :file_name
 
   def initialize
     @letter_guess = ''
@@ -157,6 +158,33 @@ class Player
       @game_state
     end
   end
+
+  def get_file_load_name 
+    begin
+      puts "\nWhich save file do you want to load?"
+      Dir.entries("saves").each do |file_name|
+        print "#{file_name}  " unless file_name == "." || file_name == ".."
+      end
+      puts "\n"
+      puts "\nFile name: "
+      @file_name = gets.chomp
+      unless Dir.entries("saves").include?(@file_name)
+        raise "ERROR: File name does not exist!"
+      end
+    rescue
+      puts "\nThat file name does not exist... please try again!"
+      sleep 1
+      retry
+    else
+      print "\n."
+      sleep 0.5
+      print "."
+      sleep 0.5
+      print "."
+      sleep 0.5
+      print " Loaded Successfully!\n"
+    end
+  end
 end
 
 player = Player.new
@@ -191,18 +219,17 @@ if game_state == "new"
   end
 
 elsif game_state == "load"
-  game = Game.from_yaml("saves/save_file.yml")
+  player.get_file_load_name
+  game = Game.from_yaml("saves/#{player.file_name}")
 
   until game.incorrect_guesses.zero? || game.winner
     game.show_wrong_guesses_left
     game.show_guessed_letters
 
     puts game.random_word
-
     game.display_word_state
 
     player.get_letter_guess(game.incorrect_letters, game.word_display)
-
     if player.letter_guess == "save"
       game.save_game
     else

@@ -1,18 +1,14 @@
 ---
-:random_word: hollywood
+:random_word: blink
 :incorrect_guesses: 3
 :word_display:
-- h
 - __
 - l
-- l
-- __
-- __
-- __
+- i
 - __
 - __
 :incorrect_letters:
-- p
-- x
-- c
+- q
+- w
+- e
 :winner: false
