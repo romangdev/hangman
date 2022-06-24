@@ -1,13 +1,15 @@
-require "yaml"
-require_relative "hangman"
-require_relative "game"
-require_relative "player"
+require 'yaml'
+require_relative 'hangman'
+require_relative 'game'
+require_relative 'player'
+
+# This file runs and executes the entire game of hangman
 
 player = Player.new
 game_state = player.choose_game_state
 
 case game_state
-when "new"
+when 'new'
   game = Game.new
 
   game.get_random_word
@@ -15,7 +17,7 @@ when "new"
 
   Hangman.play_game(game, player)
 
-when "load"
+when 'load'
   player.get_file_load_name
   game = Game.from_yaml("saves/#{player.file_name}")
 
