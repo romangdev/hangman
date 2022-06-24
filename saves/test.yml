@@ -1,16 +1,21 @@
 ---
-:random_word: bangkok
+:random_word: publications
 :incorrect_guesses: 3
 :word_display:
+- __
+- u
 - b
+- l
+- __
+- c
+- __
+- t
+- __
 - __
 - n
 - __
-- k
-- __
-- k
 :incorrect_letters:
-- q
-- e
-- r
+- x
+- v
+- z
 :winner: false

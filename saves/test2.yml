@@ -1,0 +1,14 @@
+---
+:random_word: inform
+:incorrect_guesses: 4
+:word_display:
+- __
+- __
+- f
+- __
+- r
+- __
+:incorrect_letters:
+- w
+- g
+:winner: false

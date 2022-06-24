@@ -1,5 +1,26 @@
 require "yaml"
 
+class Hangman
+  def self.play_game(game, player)
+    until game.incorrect_guesses.zero? || game.winner
+      game.show_wrong_guesses_left
+      game.show_guessed_letters
+      game.display_word_state
+  
+      player.get_letter_guess(game.incorrect_letters, game.word_display)
+      if player.letter_guess == "save"
+        game.save_game
+      else
+        flag = game.fill_guess(player.letter_guess)
+        game.handle_wrong_guess(player.letter_guess) if flag == false
+      
+        game.check_winner
+        game.check_loser
+      end
+    end
+  end
+end
+
 class Game
   attr_accessor :word_display, :incorrect_letters
   attr_reader :random_word, :incorrect_guesses, :winner
@@ -188,56 +209,20 @@ class Player
 end
 
 player = Player.new
-
 game_state = player.choose_game_state
 
-if game_state == "new"
+case game_state
+when "new"
   game = Game.new
 
   game.get_random_word
   game.fill_empty_word_state
 
-  until game.incorrect_guesses.zero? || game.winner
-    game.show_wrong_guesses_left
-    game.show_guessed_letters
+  Hangman.play_game(game, player)
 
-    puts game.random_word
-
-    game.display_word_state
-
-    player.get_letter_guess(game.incorrect_letters, game.word_display)
-
-    if player.letter_guess == "save"
-      game.save_game
-    else
-      flag = game.fill_guess(player.letter_guess)
-      game.handle_wrong_guess(player.letter_guess) if flag == false
-    
-      game.check_winner
-      game.check_loser
-    end
-  end
-
-elsif game_state == "load"
+when "load"
   player.get_file_load_name
   game = Game.from_yaml("saves/#{player.file_name}")
 
-  until game.incorrect_guesses.zero? || game.winner
-    game.show_wrong_guesses_left
-    game.show_guessed_letters
-
-    puts game.random_word
-    game.display_word_state
-
-    player.get_letter_guess(game.incorrect_letters, game.word_display)
-    if player.letter_guess == "save"
-      game.save_game
-    else
-      flag = game.fill_guess(player.letter_guess)
-      game.handle_wrong_guess(player.letter_guess) if flag == false
-    
-      game.check_winner
-      game.check_loser
-    end
-  end
+  Hangman.play_game(game, player)
 end
