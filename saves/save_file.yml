@@ -1,0 +1,15 @@
+---
+:random_word: compare
+:incorrect_guesses: 4
+:word_display:
+- c
+- o
+- __
+- __
+- a
+- __
+- __
+:incorrect_letters:
+- q
+- v
+:winner: false
