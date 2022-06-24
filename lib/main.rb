@@ -4,12 +4,12 @@ class Game
   attr_accessor :word_display, :incorrect_letters
   attr_reader :random_word, :incorrect_guesses, :winner
 
-  def initialize
-    @random_word = ''
-    @incorrect_guesses = 6
-    @word_display = []
-    @incorrect_letters = []
-    @winner = false
+  def initialize(random_word = '', incorrect_guesses = 6, word_display = [], incorrect_letters = [], winner = false)
+    @random_word = random_word
+    @incorrect_guesses = incorrect_guesses
+    @word_display = word_display
+    @incorrect_letters = incorrect_letters
+    @winner = winner
   end
 
   def get_random_word
@@ -89,17 +89,10 @@ class Game
   end
 
   def self.from_yaml(string)
-    file = YAML.load string
-    file_contents = File.read(string)
-    @random_word = file_contents[:random_word]
-    @incorrect_guesses = file_contents[:incorrect_guesses]
-    @word_display = file_contents[:word_display]
-    @incorrect_letters = file_contents[:incorrect_letters]
-    @winner = file_contents[:winner]
-    
-    # data = YAML.load string
-    # self.new(data[:random_word], data[:incorrect_guesses], data[:word_display], 
-    #   data[:incorrect_letters], data[:winner])
+    data = YAML.load File.read(string)
+    puts data
+    self.new(data[:random_word], data[:incorrect_guesses], data[:word_display], 
+      data[:incorrect_letters], data[:winner])
   end
 
   protected
