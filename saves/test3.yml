@@ -1,0 +1,16 @@
+---
+:random_word: deleted
+:incorrect_guesses: 3
+:word_display:
+- __
+- e
+- __
+- e
+- __
+- e
+- __
+:incorrect_letters:
+- h
+- a
+- p
+:winner: false
